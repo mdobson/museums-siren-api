@@ -16,9 +16,11 @@ var MuseumsResource = module.exports = function(client, ug) {
 MuseumsResource.prototype.init = function(config) {
   config
     .path(this.path)
+    .consumes('application/json')
     .produces('application/json')
     .produces('application/vnd.siren+json')
     .get('/', this.list)
+    .post('/', this.create)
     .get('/{id}', this.show);
 };
 
@@ -52,6 +54,29 @@ MuseumsResource.prototype.list = function(env, next) {
 
       env.format.render('museums', list);
       next(env);
+    }
+  });
+};
+
+MuseumsResource.prototype.create = function(env, next) {
+  var self = this;
+  env.request.getBody(function(err, body) {
+    if(err) {
+      console.log(err);
+      env.response.statusCode = 500;
+      next(env);
+    } else {
+      var b = JSON.parse(body.toString());
+      b.type = 'museums';
+      self.client.createEntity(b, function(err, response) {
+        if(err) {
+          console.log(err);
+          env.response.statusCode = 500;
+        } else {
+          env.response.statusCode = 201;
+        }
+        next(env);
+      });
     }
   });
 };
