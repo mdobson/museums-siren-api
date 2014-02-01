@@ -1,5 +1,6 @@
 var Museum = require('../models/museum');
 var MuseumList = require('../models/museum_list');
+var ApiError = require('../models/error');
 
 var MuseumsResource = module.exports = function(client, ug) {
   this.path = '/museums';
@@ -33,6 +34,15 @@ MuseumsResource.prototype.list = function(env, next) {
     if(err) {
       console.log('error');
       console.log(data);
+      var errorEntity = ApiError.create({
+        error:data.error,
+        description: data.exception,
+        code: 500,
+        selfUrl:  urlHelper.current()
+      });
+      env.format.render('error', errorEntity);
+      next(env);
+
     } else {
       while(self.collection.hasNextEntity()) {
         var museum = self.collection.getNextEntity();
@@ -63,15 +73,32 @@ MuseumsResource.prototype.create = function(env, next) {
   env.request.getBody(function(err, body) {
     if(err) {
       console.log(err);
-      env.response.statusCode = 500;
+      var errorEntity = ApiError.create({
+        error:data.error,
+        description: data.exception,
+        code: 500,
+        selfUrl:  urlHelper.current()
+      });
+      env.format.render('error', errorEntity);
+      env.response.statusCode = 500;  
       next(env);
+
     } else {
       var b = JSON.parse(body.toString());
       b.type = 'museums';
       self.client.createEntity(b, function(err, response) {
         if(err) {
           console.log(err);
+          var errorEntity = ApiError.create({
+            error:data.error,
+            description: data.exception,
+            code: 500,
+            selfUrl:  urlHelper.current()
+          });
+          env.format.render('error', errorEntity);
           env.response.statusCode = 500;
+          next(env);
+
         } else {
           env.response.statusCode = 201;
         }
@@ -97,7 +124,16 @@ MuseumsResource.prototype.show = function(env, next) {
     if(err) {
       console.log('error');
       console.log(data);
-      env.response.statusCode = 404;
+      var errorEntity = ApiError.create({
+        error:data.error,
+        description: data.exception,
+        code: 404,
+        selfUrl:  urlHelper.current()
+      });
+      env.format.render('error', errorEntity);
+      env.response.statusCode = 404;  
+      next(env);
+
     } else {
       var museum = Museum.create({
         id: entity.get('uuid'),
