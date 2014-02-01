@@ -1,8 +1,6 @@
 module.exports = function(model) {
   var entity = {
     class: ['museum'],
-    href: model.selfUrl,
-    rel: [ model.collectionUrl ],
     properties: {
       museum: model.museum,
       address: model.address,

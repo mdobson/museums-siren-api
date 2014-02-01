@@ -24,6 +24,8 @@ module.exports = function(model) {
   entity.entities = model.items.map(function(item) {
     var museum = {
       class: ['item', 'museum'],
+      rel: [ model.selfUrl ],
+      href: item.selfUrl,
       properties: {
         museum: item.museum,
         address: item.address,
