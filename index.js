@@ -17,4 +17,4 @@ titan()
   .format({ engines: [siren], override: {'application/json': siren }})
   .add(RootResource)
   .add(MuseumsResource, apigee, ug)
-  .listen(3000 || process.env.PORT);
+  .listen(process.env.PORT || 3000);
