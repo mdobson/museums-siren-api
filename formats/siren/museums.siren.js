@@ -26,14 +26,6 @@ module.exports = function(model) {
       class: ['item', 'museum'],
       rel: [ model.selfUrl ],
       href: item.selfUrl,
-      properties: {
-        museum: item.museum,
-        address: item.address,
-        city: item.city
-      },
-      links: [
-        { rel: ['self'], href: item.selfUrl }
-      ]
     };
 
     return museum;
