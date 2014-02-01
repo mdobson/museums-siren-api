@@ -1,6 +1,6 @@
 module.exports = function(model) {
   var entity = {
-    class: ['museums'],
+    class: ['museums', 'collection'],
     entities: [],
       actions: [
         {
