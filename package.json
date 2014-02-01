@@ -1,0 +1,16 @@
+{
+  "name": "siren-museums",
+  "version": "0.0.0",
+  "description": "Museums hypermedia API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "mdobs",
+  "license": "MIT",
+  "dependencies": {
+    "titan": "~0.1.1",
+    "usergrid": "~0.10.7",
+    "argo-formatter-siren": "0.0.0"
+  }
+}
