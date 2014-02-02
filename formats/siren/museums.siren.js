@@ -31,7 +31,12 @@ module.exports = function(model) {
       properties: {
         'museum': item.museum
       },
-      href: item.selfUrl
+      links: [
+        {
+          rel: [ 'self' ],
+          href: item.selfUrl
+        }
+      ]
     };
 
     return museum;
