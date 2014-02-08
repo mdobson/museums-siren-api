@@ -30,6 +30,27 @@ MuseumsResource.prototype.list = function(env, next) {
   var self = this;
   var items = [];
 
+  if(env.route.query) {
+    var ql = null;
+    var limit = null;
+    if(env.route.query.query) {
+      ql = env.route.query.query;
+    }
+
+    if(env.route.query.limit) {
+      limit = env.route.query.limit;
+    }
+
+    this.collection = new this.ug.collection({
+      type:'museums',
+      client:this.client,
+      qs: {
+        'ql':ql,
+        'limit':limit
+      }
+    });
+  }
+
   this.collection.fetch(function(err, data) {
     if(err) {
       console.log('error');
