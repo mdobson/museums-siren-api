@@ -244,7 +244,7 @@ MuseumsResource.prototype.update = function(env, next) {
       next(env);
     } else {
       var b = JSON.parse(data.toString());
-      this.client.getEntity(opts, function(err, entity, data) {
+      self.client.getEntity(opts, function(err, entity, data) {
         if(err) {
           console.log('error');
           console.log(data);
