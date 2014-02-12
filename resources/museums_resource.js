@@ -123,7 +123,16 @@ MuseumsResource.prototype.create = function(env, next) {
           next(env);
 
         } else {
-          env.response.statusCode = 201;
+          var museum = Museum.create({
+            id: entity.get('uuid'),
+            museum: entity.get('museum'),
+            address: entity.get('address'),
+            city: entity.get('city'),
+            selfUrl: urlHelper.current(),
+            collectionUrl: urlHelper.path(self.path)
+          });
+
+          env.format.render('museum', museum);
         }
         next(env);
       });
