@@ -33,7 +33,17 @@ module.exports = function(model) {
           'method': 'DELETE',
           'href': model.selfUrl,
           'type': 'application/json'
-         }
+         },
+         {
+          'name':'get-museums',
+          'title':'Get Museums',
+          'method':'GET',
+          'href':model.selfUrl,
+          'fields': [
+            { 'name':'query', 'type':'text' },
+            { 'name':'limit', 'type':'number' }
+          ]
+        }
       ],
     links: [
       { rel: ['self'], href: model.selfUrl }
