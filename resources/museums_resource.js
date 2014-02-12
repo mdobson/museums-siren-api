@@ -22,7 +22,9 @@ MuseumsResource.prototype.init = function(config) {
     .produces('application/vnd.siren+json')
     .get('/', this.list)
     .post('/', this.create)
-    .get('/{id}', this.show);
+    .get('/{id}', this.show)
+    .del('/{id}', this.del)
+    .put('/{id}', this.update);
 };
 
 MuseumsResource.prototype.list = function(env, next) {
@@ -95,8 +97,8 @@ MuseumsResource.prototype.create = function(env, next) {
     if(err) {
       console.log(err);
       var errorEntity = ApiError.create({
-        error:data.error,
-        description: data.exception,
+        error:'body-retrieve',
+        description: 'Cannot retrieve body.',
         code: 500,
         selfUrl:  urlHelper.current()
       });
@@ -171,3 +173,133 @@ MuseumsResource.prototype.show = function(env, next) {
   });
 };
 
+
+MuseumsResource.prototype.del = function(env, next) {
+  var id = env.route.params.id;
+
+  var opts = {
+    type:'museums',
+    uuid: id
+  };
+
+  var self = this;
+
+  this.client.getEntity(opts, function(err, entity, data) {
+    if(err) {
+      console.log('error');
+      console.log(data);
+      var errorEntity = ApiError.create({
+        error: data.error,
+        description: data.exception,
+        code: 404,
+        selfUrl: urlHelper.current()
+      });
+      env.format.render('error', errorEntity);
+      env.response.statusCode = 404;
+      next(env);
+    } else {
+      entity.destroy(function(err, data) {
+        if(err) {
+          var errorEntity = ApiError.create({
+            error: data.error,
+            description: data.exception,
+            code: 404,
+            selfUrl: urlHelper.current()
+          });
+          env.format.render('error', errorEntity);
+          env.response.statusCode = 404;
+          next(env);
+        } else {
+          env.response.statusCode = 204;
+          next(env);
+        }
+      });
+    }
+  });
+};
+
+MuseumsResource.prototype.update = function(env, next) {
+  var id = env.route.params.id;
+  var urlHelper = env.helpers.url;
+
+  var opts = {
+    type:'museums',
+    uuid: id
+  };
+
+  var self = this;
+  
+  env.request.getBody(function(err, data) {
+    if(err) {
+      console.log('error');
+      console.log(err);
+      var errorEntity = ApiError.create({
+        error:'body',
+        description:'Unable to retrieve request body',
+        code:500,
+        selfUrl: urlHelper.current()
+      });
+      env.format.render('error', errorEntity);
+      env.response.statusCode = 500;
+      next(env);
+    } else {
+      var b = JSON.parse(data.toString());
+      this.client.getEntity(opts, function(err, entity, data) {
+        if(err) {
+          console.log('error');
+          console.log(data);
+          var errorEntity = ApiError.create({
+            error:data.error,
+            description: data.exception,
+            code: 404,
+            selfUrl:  urlHelper.current()
+          });
+          env.format.render('error', errorEntity);
+          env.response.statusCode = 404;  
+          next(env);
+
+        } else {
+          if(b.museum) {
+           entity.set('museum', b.museum);
+          }
+
+          if(b.address) {
+            entity.set('address', b.address);
+          }
+
+          if(b.city) {
+            entity.set('city', b.city);
+          }
+
+          entity.save(function(err, data, entity) {
+            if(err) {
+              console.log(err);
+              var errorEntity = ApiError.create({
+                error:data.error,
+                description: data.exception,
+                code: 500,
+                selfUrl:  urlHelper.current()
+              });
+              env.format.render('error', errorEntity);
+              env.response.statusCode = 500;
+              next(env);
+            } else {
+              var museum = Museum.create({
+                id: entity.get('uuid'),
+                museum: entity.get('museum'),
+                address: entity.get('address'),
+                city: entity.get('city'),
+                selfUrl: urlHelper.current(),
+                collectionUrl: urlHelper.path(self.path)
+              });
+
+              env.format.render('museum', museum);
+              env.response.statusCode = 204;
+              next(env);
+            }
+          });
+        } 
+      });
+    }
+  });
+};

@@ -14,7 +14,26 @@ module.exports = function(model) {
             { 'name': 'address', 'type': 'text' },
             { 'name': 'city', 'type': 'text' }
           ]
-        }
+        },
+        {
+          'name': 'update-museum',
+          'title': 'Update Museum',
+          'method': 'PUT',
+          'href': model.selfUrl,
+          'type': 'application/json',
+          'fields': [
+            { 'name': 'museum', 'type':'text' },
+            { 'name': 'address', 'type':'text'},
+            { 'name': 'city', 'type':'text'}
+          ]
+        },
+        {
+          'name':'delete-museum',
+          'title': 'Delete Museum',
+          'method': 'DELETE',
+          'href': model.selfUrl,
+          'type': 'application/json'
+         }
       ],
     links: [
       { rel: ['self'], href: model.selfUrl }
