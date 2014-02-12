@@ -93,6 +93,7 @@ MuseumsResource.prototype.list = function(env, next) {
 
 MuseumsResource.prototype.create = function(env, next) {
   var self = this;
+  var urlHelper = env.helpers.url;
   env.request.getBody(function(err, body) {
     if(err) {
       console.log(err);
@@ -109,7 +110,7 @@ MuseumsResource.prototype.create = function(env, next) {
     } else {
       var b = JSON.parse(body.toString());
       b.type = 'museums';
-      self.client.createEntity(b, function(err, response) {
+      self.client.createEntity(b, function(err, entity, data) {
         if(err) {
           console.log(err);
           var errorEntity = ApiError.create({
@@ -128,7 +129,7 @@ MuseumsResource.prototype.create = function(env, next) {
             museum: entity.get('museum'),
             address: entity.get('address'),
             city: entity.get('city'),
-            selfUrl: urlHelper.current(),
+            selfUrl: urlHelper.path(self.path+'/'+entity.get('uuid')),
             collectionUrl: urlHelper.path(self.path)
           });
 
