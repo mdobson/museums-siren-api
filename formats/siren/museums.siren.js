@@ -1,6 +1,6 @@
 module.exports = function(model) {
   var entity = {
-    class: ['museums', 'collection'],
+    'class': ['museums', 'collection'],
     entities: [],
       actions: [
         {
@@ -27,13 +27,6 @@ module.exports = function(model) {
             { 'name': 'city', 'type':'text'}
           ]
         },
-        {
-          'name':'delete-museum',
-          'title': 'Delete Museum',
-          'method': 'DELETE',
-          'href': model.selfUrl,
-          'type': 'application/json'
-         },
          {
           'name':'get-museums',
           'title':'Get Museums',
