@@ -12,7 +12,6 @@ var RootResource = module.exports = function() {
 RootResource.prototype.init = function(config) {
   config
     .path(this.path)
-    .produces('application/json')
     .produces('application/vnd.siren+json')
     .get('/',this.list);
 };

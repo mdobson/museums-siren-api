@@ -18,7 +18,6 @@ MuseumsResource.prototype.init = function(config) {
   config
     .path(this.path)
     .consumes('application/json')
-    .produces('application/json')
     .produces('application/vnd.siren+json')
     .get('/', this.list)
     .post('/', this.create)
