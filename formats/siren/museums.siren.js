@@ -36,6 +36,16 @@ module.exports = function(model) {
             { 'name':'query', 'type':'text' },
             { 'name':'limit', 'type':'number' }
           ]
+        },
+        {
+          'name':'get-museums-fragment',
+          'title':'Get Museums With Fragment',
+          'method': 'GET',
+          'href': model.selfPath,
+          'fields': [
+            { 'name':'query', 'type':'text' },
+            { 'name':'limit', 'type':'number' }
+          ]
         }
       ],
     links: [

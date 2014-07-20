@@ -10,6 +10,7 @@ MuseumList.create = function(fill) {
 
   list.items = fill.items;
   list.selfUrl = fill.selfUrl;
+  list.selfPath = fill.selfPath;
 
   return list;
 };

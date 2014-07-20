@@ -81,7 +81,8 @@ MuseumsResource.prototype.list = function(env, next) {
 
       var list = MuseumList.create({
         items: items,
-        selfUrl: urlHelper.current()
+        selfUrl: urlHelper.current(),
+        selfPath: self.path 
       });
 
       env.format.render('museums', list);
